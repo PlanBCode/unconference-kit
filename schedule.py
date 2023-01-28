@@ -96,25 +96,22 @@ class schedule:
 		except:
 			print "something went wrong with reload schedule"
 			pass
-		nexttalk="PAUZE"
-		nextd=None
+		nexttalk=None
 		for d in self.data:
 			#print "==>",d['location']
 			if d['location']==self.locations[self.mylocation]:
 				start=time.mktime(datetime.datetime.strptime(d['datetime'], "%Y%m%d%H%M").timetuple())
 				duration=int(d['duration'])*60
 				if (t>=start) and (t<=start+duration):
-					return d['title'], duration, d['name'],d['padname']
-				if start>t:
-					if not nextd: nextd=start-t
-					else:
-						if nextd>start-t:
-							nextd=start-t
-							nexttalk = d['title']
-		if nextd==None:
+                                        nexttalk = (start, d)
+                                        break
+                                if start>t and (not nexttalk or start < nexttalk[0]):
+                                        nexttalk = (start, d)
+		if nexttalk==None:
 			return None,None,None,None
 		else:
-			return  nexttalk, -nextd, '',''               
+                        start, d = nexttalk
+                        return d['title'], d['duration']*60, d['name'], d['padname']
 
 if __name__ == '__main__':
 	SCHEDULEURL="https://koppelting.org/huk.php?festival=meetkoppel19"
