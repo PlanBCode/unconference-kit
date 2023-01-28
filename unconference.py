@@ -594,12 +594,12 @@ def showtalkmenu(location=None,day=None):
 				raise NameError()
 			elif index<=len(locations):
 				location=locations[index-1]
-				a,b=showtalkmenu(location,day)
-				return a,b
+				return showtalkmenu(location,day)
 			elif index==offset-1:
 				preview()
 			else:
 				day=days[index-1-len(locations)]
+				return showtalkmenu(location,day)
 		elif btn==DOWN:
 			index+=1
 			if index>=len(talks):
